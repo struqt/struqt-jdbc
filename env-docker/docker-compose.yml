@@ -1,0 +1,14 @@
+version: '2'
+services:
+
+  struqt_mysql:
+    image: mysql:5.6.33
+    restart: always
+    ports:
+      - "33061:3306"
+    expose:
+      - "33061"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123!@#4567
+      MYSQL_USER: test
+      MYSQL_PASSWORD: 123789
