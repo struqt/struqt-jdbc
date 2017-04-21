@@ -10,6 +10,10 @@
   <url>http://www.struqt.com/</url>
   <description>StruqtJDBC is a Lightweight JDBC Persistence Library for Java</description>
 
+  <modules>
+    <module>struqt-sql-maker</module>
+  </modules>
+
   <licenses>
     <license>
       <name>MIT License</name>
@@ -108,6 +112,14 @@
           <source>1.8</source>
           <target>1.8</target>
           <encoding>UTF-8</encoding>
+          <maxmem>1024m</maxmem>
+          <meminitial>256m</meminitial>
+          <fork>true</fork>
+          <debug>true</debug>
+          <debuglevel>lines,vars,source</debuglevel>
+          <compilerArgs>
+            <arg>-Xlint:varargs</arg>
+          </compilerArgs>
         </configuration>
       </plugin>
       <plugin>
