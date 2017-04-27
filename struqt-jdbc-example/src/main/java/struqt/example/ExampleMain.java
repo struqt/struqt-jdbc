@@ -8,6 +8,7 @@ import org.jooq.tools.JooqLogger;
 
 import java.util.Map;
 
+import static org.jooq.impl.DSL.inline;
 import static struqt.example.tables.SchemaVersion.SCHEMA_VERSION;
 
 /**
@@ -39,8 +40,8 @@ public class ExampleMain {
                     SCHEMA_VERSION.APPLIED_ON,
                     SCHEMA_VERSION.DURATION)
                     .from(SCHEMA_VERSION)
-                    //.where("duration<?")
-                    .where(SCHEMA_VERSION.DURATION.lessThan(0))
+                    .where(SCHEMA_VERSION.DURATION.ge(inline(0)))
+                    .and(SCHEMA_VERSION.DURATION.lt(10))
                     .orderBy(SCHEMA_VERSION.VERSION)
             );
     }

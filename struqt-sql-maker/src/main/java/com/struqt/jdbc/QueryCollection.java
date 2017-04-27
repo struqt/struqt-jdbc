@@ -1,7 +1,11 @@
 package com.struqt.jdbc;
 
 import org.jooq.DSLContext;
+import org.jooq.Param;
+import org.jooq.Query;
 import org.jooq.SQLDialect;
+import org.jooq.conf.Settings;
+import org.jooq.conf.StatementType;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -38,9 +42,10 @@ public class QueryCollection {
 
     public Map<String, String> generate(SQLDialect dialect) {
         Map<String, String> map = new LinkedHashMap<>(providers.size());
-        DSLContext dsl = using(dialect);
+        DSLContext dsl = using(dialect, new Settings().withStatementType(StatementType.PREPARED_STATEMENT));
         providers.forEach((k, v) -> {
-            String sql = dsl.renderInlined(v.provide(dsl));
+            Query q = v.provide(dsl);
+            String sql = dsl.render(q);
             //String key = dialect.getName();
             String key = "";
             if (name != null && name.length() > 0) {
@@ -49,9 +54,20 @@ public class QueryCollection {
             }
             key += '/';
             key += k;
+            key += "@" + paramCount(q);
             map.put(key, sql);
         });
         return map;
+    }
+
+    private int paramCount(Query q) {
+        int count = 0;
+        for (Map.Entry<String, Param<?>> p : q.getParams().entrySet()) {
+            if (!p.getValue().isInline()) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public String getName() {
