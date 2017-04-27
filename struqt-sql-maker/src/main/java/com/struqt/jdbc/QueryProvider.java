@@ -1,13 +1,13 @@
 package com.struqt.jdbc;
 
 import org.jooq.DSLContext;
-import org.jooq.Query;
+import org.jooq.QueryPart;
 
 /**
  * Created by wangkang on 4/21/17
  */
 public interface QueryProvider {
 
-    Query provide(DSLContext dsl);
+    QueryPart provide(DSLContext dsl);
 
 }

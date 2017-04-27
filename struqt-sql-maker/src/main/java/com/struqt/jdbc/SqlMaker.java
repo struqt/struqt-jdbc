@@ -26,13 +26,9 @@ public class SqlMaker {
     }
 
     public Map<String, String> generate(SQLDialect dialect) {
-        return generate(dialect, true);
-    }
-
-    public Map<String, String> generate(SQLDialect dialect, boolean oneLine) {
         Map<String, String> map = new LinkedHashMap<>();
         collections.forEach((k, v) -> {
-            Map<String, String> m = v.generate(dialect, oneLine);
+            Map<String, String> m = v.generate(dialect);
             map.putAll(m);
         });
         return map;

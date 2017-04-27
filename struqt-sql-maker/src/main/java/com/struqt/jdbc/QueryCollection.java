@@ -38,17 +38,10 @@ public class QueryCollection {
     }
 
     public Map<String, String> generate(SQLDialect dialect) {
-        return generate(dialect, false);
-    }
-
-    public Map<String, String> generate(SQLDialect dialect, boolean oneLine) {
         Map<String, String> map = new LinkedHashMap<>(providers.size());
         DSLContext dsl = using(dialect);
         providers.forEach((k, v) -> {
-            String sql = v.provide(dsl).toString();
-            if (oneLine) {
-                sql = multiSpacePattern.matcher(sql.trim()).replaceAll(" ");
-            }
+            String sql = dsl.renderInlined(v.provide(dsl));
             String key = k;
             if (name != null && name.length() > 0) {
                 key = name + '/' + k;
