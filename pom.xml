@@ -12,6 +12,7 @@
 
   <modules>
     <module>struqt-sql-maker</module>
+    <module>struqt-jdbc-example</module>
   </modules>
 
   <licenses>

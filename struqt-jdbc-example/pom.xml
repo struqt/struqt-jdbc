@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>struqt-jdbc</artifactId>
+    <groupId>com.struqt</groupId>
+    <version>0.9.2-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>struqt-jdbc-example</artifactId>
+  <name>StruqtJDBC.Example</name>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.javalite</groupId>
+        <artifactId>db-migrator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>debug_migrations</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>migrate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <!-- http://javalite.io/database_migrations -->
+          <groupId>org.javalite</groupId>
+          <artifactId>db-migrator-maven-plugin</artifactId>
+          <version>1.4.13.j7</version>
+          <configuration>
+            <migrationsPath>/src/main/resources/migrations</migrationsPath>
+            <configFile>${project.basedir}/src/main/resources/db-migrator.properties</configFile>
+            <environments>debug</environments>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>mysql</groupId>
+              <artifactId>mysql-connector-java</artifactId>
+              <version>5.1.38</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>
