@@ -41,10 +41,17 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+    <version.mysql>5.1.38</version.mysql>
+    <version.jooq>3.9.2</version.jooq>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>${version.mysql}</version>
+      </dependency>
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>

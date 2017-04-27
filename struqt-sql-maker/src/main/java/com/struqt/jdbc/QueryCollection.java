@@ -5,7 +5,6 @@ import org.jooq.SQLDialect;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import static org.jooq.impl.DSL.using;
 
@@ -14,7 +13,7 @@ import static org.jooq.impl.DSL.using;
  */
 public class QueryCollection {
 
-    private static Pattern multiSpacePattern = Pattern.compile("[\\s]+");
+    //private static Pattern multiSpacePattern = Pattern.compile("[\\s]+");
 
     private final Map<String, QueryProvider> providers;
     private final String name;
@@ -42,10 +41,14 @@ public class QueryCollection {
         DSLContext dsl = using(dialect);
         providers.forEach((k, v) -> {
             String sql = dsl.renderInlined(v.provide(dsl));
-            String key = k;
+            //String key = dialect.getName();
+            String key = "";
             if (name != null && name.length() > 0) {
-                key = name + '/' + k;
+                key += '/';
+                key += name;
             }
+            key += '/';
+            key += k;
             map.put(key, sql);
         });
         return map;

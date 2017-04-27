@@ -11,6 +11,14 @@
   <artifactId>struqt-jdbc-example</artifactId>
   <name>StruqtJDBC.Example</name>
 
+  <dependencies>
+    <dependency>
+      <groupId>${groupId}</groupId>
+      <artifactId>struqt-sql-maker</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -22,6 +30,17 @@
             <phase>validate</phase>
             <goals>
               <goal>migrate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-codegen-maven</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
             </goals>
           </execution>
         </executions>
@@ -43,7 +62,46 @@
             <dependency>
               <groupId>mysql</groupId>
               <artifactId>mysql-connector-java</artifactId>
-              <version>5.1.38</version>
+              <version>${version.mysql}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>org.jooq</groupId>
+          <artifactId>jooq-codegen-maven</artifactId>
+          <version>${version.jooq}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>generate</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <jdbc>
+              <driver>com.mysql.jdbc.Driver</driver>
+              <url>jdbc:mysql://127.0.0.1:33061</url>
+              <user>root</user>
+              <password>123!@#4567</password>
+            </jdbc>
+            <generator>
+              <database>
+                <name>org.jooq.util.mysql.MySQLDatabase</name>
+                <includes>.*</includes>
+                <excludes></excludes>
+                <inputSchema>struqt_example</inputSchema>
+              </database>
+              <target>
+                <packageName>struqt.example</packageName>
+                <directory>target/generated-sources/jooq</directory>
+              </target>
+            </generator>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>mysql</groupId>
+              <artifactId>mysql-connector-java</artifactId>
+              <version>${version.mysql}</version>
             </dependency>
           </dependencies>
         </plugin>

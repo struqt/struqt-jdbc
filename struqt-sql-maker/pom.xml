@@ -12,10 +12,6 @@
   <artifactId>struqt-sql-maker</artifactId>
   <name>StruqtJDBC.SqlBuilder</name>
 
-  <properties>
-    <version.jooq>3.9.1</version.jooq>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.jooq</groupId>
