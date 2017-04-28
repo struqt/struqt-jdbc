@@ -13,7 +13,7 @@
   <modules>
     <module>struqt-jdbc-config</module>
     <module>struqt-jdbc-jooq</module>
-    <module>struqt-jdbc-example</module>
+    <module>struqt-jdbc-runner</module>
   </modules>
 
   <licenses>
@@ -42,18 +42,12 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-    <version.mysql>5.1.38</version.mysql>
     <version.jooq>3.9.2</version.jooq>
     <version.invar>1.0.8</version.invar>
   </properties>
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>mysql</groupId>
-        <artifactId>mysql-connector-java</artifactId>
-        <version>${version.mysql}</version>
-      </dependency>
       <dependency>
         <groupId>com.struqt</groupId>
         <artifactId>invar-lib</artifactId>

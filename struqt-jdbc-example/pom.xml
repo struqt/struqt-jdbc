@@ -2,20 +2,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <artifactId>struqt-jdbc</artifactId>
-    <groupId>com.struqt</groupId>
-    <version>0.9.2-SNAPSHOT</version>
-  </parent>
+
   <modelVersion>4.0.0</modelVersion>
+  <groupId>com.struqt</groupId>
   <artifactId>struqt-jdbc-example</artifactId>
+  <version>0.9.2-SNAPSHOT</version>
   <name>StruqtJDBC.Example</name>
+
+  <properties>
+    <version.mysql>5.1.38</version.mysql>
+    <version.jooq>3.9.2</version.jooq>
+    <version.struqt.jdbc>0.9.2-SNAPSHOT</version.struqt.jdbc>
+  </properties>
 
   <dependencies>
     <dependency>
-      <groupId>${groupId}</groupId>
-      <artifactId>struqt-jdbc-jooq</artifactId>
-      <version>${project.version}</version>
+      <groupId>com.struqt</groupId>
+      <artifactId>struqt-jdbc-runner</artifactId>
+      <version>${version.struqt.jdbc}</version>
     </dependency>
   </dependencies>
 
@@ -45,9 +49,31 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>UTF-8</encoding>
+          <maxmem>1024m</maxmem>
+          <meminitial>256m</meminitial>
+          <fork>true</fork>
+          <debug>true</debug>
+          <debuglevel>lines,vars,source</debuglevel>
+          <compilerArgs>
+            <arg>-Xlint:varargs</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
     </plugins>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.5.1</version>
+        </plugin>
         <plugin>
           <!-- http://javalite.io/database_migrations -->
           <groupId>org.javalite</groupId>
