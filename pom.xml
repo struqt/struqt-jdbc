@@ -12,7 +12,7 @@
 
   <modules>
     <module>struqt-jdbc-config</module>
-    <module>struqt-sql-maker</module>
+    <module>struqt-jdbc-jooq</module>
     <module>struqt-jdbc-example</module>
   </modules>
 

@@ -14,7 +14,7 @@
   <dependencies>
     <dependency>
       <groupId>${groupId}</groupId>
-      <artifactId>struqt-sql-maker</artifactId>
+      <artifactId>struqt-jdbc-jooq</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
