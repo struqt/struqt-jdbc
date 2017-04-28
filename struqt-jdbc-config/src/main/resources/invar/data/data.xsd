@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+xmlns:tns="invar.data" targetNamespace="invar.data">
+
+<xs:element name="root" type="tns:com.struqt.jdbc.config.Root" />
+
+<xs:complexType name="int8"><xs:simpleContent><xs:extension base="xs:string">
+  <xs:attribute type="xs:byte" name="value" use="optional"/></xs:extension></xs:simpleContent></xs:complexType>
+<xs:complexType name="int16"><xs:simpleContent><xs:extension base="xs:string">
+  <xs:attribute type="xs:short" name="value" use="optional"/></xs:extension></xs:simpleContent></xs:complexType>
+<xs:complexType name="int32"><xs:simpleContent><xs:extension base="xs:string">
+  <xs:attribute type="xs:int" name="value" use="optional"/></xs:extension></xs:simpleContent></xs:complexType>
+<xs:complexType name="int64"><xs:simpleContent><xs:extension base="xs:string">
+  <xs:attribute type="xs:long" name="value" use="optional"/></xs:extension></xs:simpleContent></xs:complexType>
+<xs:complexType name="uint8"><xs:simpleContent><xs:extension base="xs:string">
+  <xs:attribute type="xs:unsignedByte" name="value" use="optional"/></xs:extension></xs:simpleContent></xs:complexType>
+<xs:complexType name="uint16"><xs:simpleContent><xs:extension base="xs:string">
+  <xs:attribute type="xs:unsignedShort" name="value" use="optional"/></xs:extension></xs:simpleContent></xs:complexType>
+<xs:complexType name="uint32"><xs:simpleContent><xs:extension base="xs:string">
+  <xs:attribute type="xs:unsignedInt" name="value" use="optional"/></xs:extension></xs:simpleContent></xs:complexType>
+<xs:complexType name="uint64"><xs:simpleContent><xs:extension base="xs:string">
+  <xs:attribute type="xs:unsignedLong" name="value" use="optional"/></xs:extension></xs:simpleContent></xs:complexType>
+<xs:complexType name="float"><xs:simpleContent><xs:extension base="xs:string">
+  <xs:attribute type="xs:float" name="value" use="optional"/></xs:extension></xs:simpleContent></xs:complexType>
+<xs:complexType name="double"><xs:simpleContent><xs:extension base="xs:string">
+  <xs:attribute type="xs:double" name="value" use="optional"/></xs:extension></xs:simpleContent></xs:complexType>
+<xs:complexType name="bool"><xs:simpleContent><xs:extension base="xs:string">
+  <xs:attribute type="xs:boolean" name="value" use="optional"/></xs:extension></xs:simpleContent></xs:complexType>
+<xs:complexType name="string"><xs:simpleContent><xs:extension base="xs:string">
+  <xs:attribute type="xs:string" name="value" use="optional"/></xs:extension></xs:simpleContent></xs:complexType>
+
+<xs:complexType name="com.struqt.jdbc.config.Root">
+  <xs:sequence>
+    <xs:element name="mapStatement" minOccurs="0" maxOccurs="2048" >
+      <xs:complexType>
+      <xs:sequence>
+      <xs:element name="Statement" minOccurs="0" maxOccurs="2048" type="tns:com.struqt.jdbc.config.Statement" />
+      </xs:sequence></xs:complexType>
+    </xs:element>
+    <xs:element name="mapDataSource" minOccurs="0" maxOccurs="2048" >
+      <xs:complexType>
+      <xs:sequence>
+      <xs:element name="DataSource" minOccurs="0" maxOccurs="2048" type="tns:com.struqt.jdbc.config.DataSource" />
+      </xs:sequence></xs:complexType>
+    </xs:element>
+  </xs:sequence>
+</xs:complexType>
+<xs:complexType name="com.struqt.jdbc.config.Statement">
+  <xs:sequence>
+    <xs:element name="key" minOccurs="0" maxOccurs="2048" type="tns:string" />
+    <xs:element name="desc" minOccurs="0" maxOccurs="2048" type="tns:string" />
+    <xs:element name="sql" minOccurs="0" maxOccurs="2048" type="tns:string" />
+    <xs:element name="dataSource" minOccurs="0" maxOccurs="2048" type="tns:string" />
+    <xs:element name="attributes" minOccurs="0" maxOccurs="2048" >
+      <xs:complexType>
+      <xs:sequence>
+      <xs:element name="string" minOccurs="0" maxOccurs="2048" >
+      <xs:complexType><xs:complexContent>
+      <xs:extension base="tns:string">
+      <xs:attribute name="key" type="xs:string" use="required" />
+      </xs:extension></xs:complexContent></xs:complexType>
+      </xs:element>
+      </xs:sequence></xs:complexType>
+    </xs:element>
+  </xs:sequence>
+  <xs:attribute name="key" type="xs:string" />
+  <xs:attribute name="desc" type="xs:string" />
+  <xs:attribute name="sql" type="xs:string" />
+  <xs:attribute name="dataSource" type="xs:string" />
+</xs:complexType>
+<xs:complexType name="com.struqt.jdbc.config.DataSource">
+  <xs:sequence>
+    <xs:element name="key" minOccurs="0" maxOccurs="2048" type="tns:string" />
+    <xs:element name="jdbcUrl" minOccurs="0" maxOccurs="2048" type="tns:string" />
+    <xs:element name="database" minOccurs="0" maxOccurs="2048" type="tns:string" />
+    <xs:element name="username" minOccurs="0" maxOccurs="2048" type="tns:string" />
+    <xs:element name="password" minOccurs="0" maxOccurs="2048" type="tns:string" />
+    <xs:element name="provider" minOccurs="0" maxOccurs="2048" type="tns:string" />
+    <xs:element name="properties" minOccurs="0" maxOccurs="2048" >
+      <xs:complexType>
+      <xs:sequence>
+      <xs:element name="string" minOccurs="0" maxOccurs="2048" >
+      <xs:complexType><xs:complexContent>
+      <xs:extension base="tns:string">
+      <xs:attribute name="key" type="xs:string" use="required" />
+      </xs:extension></xs:complexContent></xs:complexType>
+      </xs:element>
+      </xs:sequence></xs:complexType>
+    </xs:element>
+    <xs:element name="attributes" minOccurs="0" maxOccurs="2048" >
+      <xs:complexType>
+      <xs:sequence>
+      <xs:element name="string" minOccurs="0" maxOccurs="2048" >
+      <xs:complexType><xs:complexContent>
+      <xs:extension base="tns:string">
+      <xs:attribute name="key" type="xs:string" use="required" />
+      </xs:extension></xs:complexContent></xs:complexType>
+      </xs:element>
+      </xs:sequence></xs:complexType>
+    </xs:element>
+  </xs:sequence>
+  <xs:attribute name="key" type="xs:string" />
+  <xs:attribute name="jdbcUrl" type="xs:string" />
+  <xs:attribute name="database" type="xs:string" />
+  <xs:attribute name="username" type="xs:string" />
+  <xs:attribute name="password" type="xs:string" />
+  <xs:attribute name="provider" type="xs:string" />
+</xs:complexType>
+</schema>

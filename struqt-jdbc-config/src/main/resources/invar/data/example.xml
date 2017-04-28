@@ -1,0 +1,40 @@
+<tns:root
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="invar.data data.xsd" xmlns:tns="invar.data">
+
+  <mapStatement>
+    <Statement key="select-now-datetime" desc="Query current time of database">
+      <sql><![CDATA[
+        select now()
+      ]]></sql>
+    </Statement>
+  </mapStatement>
+
+  <mapDataSource>
+    <DataSource key="localhost">
+      <!-- https://github.com/brettwooldridge/HikariCP/wiki/Configuration -->
+      <provider value="silo.database.HikariProvider"/>
+      <jdbcUrl value="jdbc:mysql://127.0.0.1:3306/"/>
+      <database><![CDATA[
+        struqt_example?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=UTF-8 ]]></database>
+      <username value="root"/>
+      <password value="123!@#4567"/>
+      <properties>
+        <string key="maximumPoolSize" value="10"/>
+        <string key="minimumIdle" value="10"/>
+        <string key="connectionTimeout" value="15000"/>
+        <string key="idleTimeout" value="600000"/>
+        <string key="maxLifetime" value="900000"/>
+      </properties>
+      <!-- https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration -->
+      <attributes>
+        <string key="rewriteBatchedStatements" value="true"/>
+        <string key="useServerPrepStmts" value="true"/>
+        <string key="cachePrepStmts" value="true"/>
+        <string key="prepStmtCacheSize" value="350"/>
+        <string key="prepStmtCacheSqlLimit" value="1024"/>
+      </attributes>
+    </DataSource>
+  </mapDataSource>
+
+</tns:root>

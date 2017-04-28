@@ -11,6 +11,7 @@
   <description>StruqtJDBC is a Lightweight JDBC Persistence Library for Java</description>
 
   <modules>
+    <module>struqt-jdbc-config</module>
     <module>struqt-sql-maker</module>
     <module>struqt-jdbc-example</module>
   </modules>
@@ -43,6 +44,7 @@
     <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
     <version.mysql>5.1.38</version.mysql>
     <version.jooq>3.9.2</version.jooq>
+    <version.invar>1.0.8</version.invar>
   </properties>
 
   <dependencyManagement>
@@ -51,6 +53,16 @@
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
         <version>${version.mysql}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.struqt</groupId>
+        <artifactId>invar-lib</artifactId>
+        <version>${version.invar}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.struqt</groupId>
+        <artifactId>invar-core</artifactId>
+        <version>${version.invar}</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
