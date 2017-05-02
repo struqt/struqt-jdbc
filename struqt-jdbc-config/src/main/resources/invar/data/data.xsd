@@ -40,7 +40,7 @@ xmlns:tns="invar.data" targetNamespace="invar.data">
     <xs:element name="mapDataSource" minOccurs="0" maxOccurs="2048" >
       <xs:complexType>
       <xs:sequence>
-      <xs:element name="DataSource" minOccurs="0" maxOccurs="2048" type="tns:com.struqt.jdbc.config.DataSource" />
+      <xs:element name="DataSourceConf" minOccurs="0" maxOccurs="2048" type="tns:com.struqt.jdbc.config.DataSourceConf" />
       </xs:sequence></xs:complexType>
     </xs:element>
   </xs:sequence>
@@ -68,7 +68,7 @@ xmlns:tns="invar.data" targetNamespace="invar.data">
   <xs:attribute name="sql" type="xs:string" />
   <xs:attribute name="dataSource" type="xs:string" />
 </xs:complexType>
-<xs:complexType name="com.struqt.jdbc.config.DataSource">
+<xs:complexType name="com.struqt.jdbc.config.DataSourceConf">
   <xs:sequence>
     <xs:element name="key" minOccurs="0" maxOccurs="2048" type="tns:string" />
     <xs:element name="jdbcUrl" minOccurs="0" maxOccurs="2048" type="tns:string" />

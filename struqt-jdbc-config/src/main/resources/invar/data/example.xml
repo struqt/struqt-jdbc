@@ -11,9 +11,9 @@
   </mapStatement>
 
   <mapDataSource>
-    <DataSource key="localhost">
+    <DataSourceConf key="default">
       <!-- https://github.com/brettwooldridge/HikariCP/wiki/Configuration -->
-      <provider value="silo.database.HikariProvider"/>
+      <provider value="com.struqt.jdbc.HikariProvider"/>
       <jdbcUrl value="jdbc:mysql://127.0.0.1:3306/"/>
       <database><![CDATA[
         struqt_example?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=UTF-8 ]]></database>
@@ -34,7 +34,7 @@
         <string key="prepStmtCacheSize" value="350"/>
         <string key="prepStmtCacheSqlLimit" value="1024"/>
       </attributes>
-    </DataSource>
+    </DataSourceConf>
   </mapDataSource>
 
 </tns:root>

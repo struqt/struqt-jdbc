@@ -48,7 +48,7 @@ public class ExampleMain {
             );
     }
 
-    public static Field<Long> unixTimestamp(Field<Timestamp> arg) {
+    private static Field<Long> unixTimestamp(Field<Timestamp> arg) {
         return DSL.field("unix_timestamp({0})", Long.class, arg);
     }
 

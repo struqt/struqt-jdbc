@@ -21,6 +21,17 @@
       <artifactId>struqt-jdbc-runner</artifactId>
       <version>${version.struqt.jdbc}</version>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>struqt-jdbc-jooq</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>${version.mysql}</version>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
 
   <build>
