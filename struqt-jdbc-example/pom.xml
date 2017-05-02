@@ -114,7 +114,7 @@
               <database>
                 <name>org.jooq.util.mysql.MySQLDatabase</name>
                 <includes>.*</includes>
-                <excludes></excludes>
+                <excludes>schema_version</excludes>
                 <inputSchema>struqt_example</inputSchema>
               </database>
               <target>

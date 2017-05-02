@@ -4,6 +4,7 @@ import org.jooq.DSLContext;
 import org.jooq.Param;
 import org.jooq.Query;
 import org.jooq.SQLDialect;
+import org.jooq.conf.RenderKeywordStyle;
 import org.jooq.conf.Settings;
 import org.jooq.conf.StatementType;
 
@@ -23,7 +24,7 @@ public class QueryCollection {
     private final String name;
 
     public QueryCollection() {
-        this("sql", new LinkedHashMap<>());
+        this(null, new LinkedHashMap<>());
     }
 
     public QueryCollection(String name) {
@@ -42,7 +43,7 @@ public class QueryCollection {
 
     public Map<String, String> generate(SQLDialect dialect) {
         Map<String, String> map = new LinkedHashMap<>(providers.size());
-        DSLContext dsl = using(dialect, new Settings().withStatementType(StatementType.PREPARED_STATEMENT));
+        DSLContext dsl = using(dialect, makeSettings());
         providers.forEach((k, v) -> {
             Query q = v.provide(dsl);
             String sql = dsl.render(q);
@@ -68,6 +69,15 @@ public class QueryCollection {
             }
         }
         return count;
+    }
+
+    private Settings makeSettings() {
+        Settings settings = new Settings();
+        settings.setStatementType(StatementType.PREPARED_STATEMENT);
+        settings.setRenderSchema(false);
+        settings.setRenderKeywordStyle(RenderKeywordStyle.LOWER);
+        settings.setRenderFormatted(true);
+        return settings;
     }
 
     public String getName() {
