@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class DoBatch extends DoSql<DoBatch> {
 
-    static public DoBatch Get() {
+    static DoBatch Get() {
         return new DoBatch();
     }
 

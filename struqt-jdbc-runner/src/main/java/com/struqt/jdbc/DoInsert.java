@@ -7,7 +7,7 @@ import java.sql.*;
  */
 public class DoInsert extends DoSql<DoInsert> {
 
-    static public DoInsert Get() {
+    static DoInsert Get() {
         return new DoInsert();
     }
 

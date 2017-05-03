@@ -2,7 +2,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="invar.data data.xsd" xmlns:tns="invar.data">
 
-  <moduleName value="test"/>
+  <moduleName value=""/>
   <defaultDataSource value="default"/>
 
   <mapStatement>
@@ -11,12 +11,17 @@
         select now()
       ]]></sql>
     </Statement>
+    <Statement key="select-database-versions" desc="">
+      <sql><![CDATA[
+        show global variables like '%version%'
+      ]]></sql>
+    </Statement>
   </mapStatement>
 
   <mapDataSource>
     <DataSourceConf key="default" dialect="MySQL">
       <!-- https://github.com/brettwooldridge/HikariCP/wiki/Configuration -->
-      <provider value="com.struqt.jdbc.HikariProvider"/>
+      <provider value="com.struqt.jdbc.DataSourceHikari"/>
       <jdbcUrl value="jdbc:mysql://127.0.0.1:33061/"/>
       <database><![CDATA[
         struqt_example?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=UTF-8 ]]></database>

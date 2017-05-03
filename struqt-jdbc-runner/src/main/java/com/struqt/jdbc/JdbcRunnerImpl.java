@@ -7,9 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -19,45 +20,115 @@ public class JdbcRunnerImpl implements JdbcRunner {
 
     static private final Logger log = LoggerFactory.getLogger(JdbcRunnerImpl.class);
     static private final Pattern multiSpacePattern = Pattern.compile("[\\s]+");
+
+    private final JdbcRunnerConf config;
     private final Map<String, DataSource> mapDataSource = new HashMap<>();
     private final Map<String, String> mapDataSourceDialect = new HashMap<>();
     private final Map<String, Statement> mapSql = new HashMap<>(128);
-    private final JdbcRunnerConf config;
 
     public JdbcRunnerImpl(JdbcRunnerConf config) {
         this.config = config;
         initSqlStatements(config.getMapStatement());
     }
 
-    public Long queryCount(String key) {
-        return queryScalar(key, Long.class);
+    public Long queryCount(String key, Object... params) {
+        return queryScalar(key, Long.class, params);
     }
 
     public <T> T queryScalar(String key, final Class<T> C, final Object... params) {
-        List<Object> list = new ArrayList<>(params.length);
-        Collections.addAll(list, params);
-        return queryScalar(key, C, list);
+        return transactionAuto(key, null, getDataSource(getSqlConfig(key)), ((conn, task) ->
+            JdbcTask.queryScalar(C, task, conn, getSql(key), params)));
     }
 
     public <T> T queryScalar(String key, final Class<T> C, final List<Object> params) {
-        Statement s = getSqlConfig(key);
-        if (s == null) {
-            return null;
-        }
-        final String sql = s.getSql();
-        return startTransactionAuto(null, new TransactionTask<T>(getDataSource(s), key) {
-            @Override
-            public T run(Connection conn) throws SQLException {
-                DoQuery<T> q = queryScalar(conn, C).setSql(sql);
-                if (params != null) {
-                    params.forEach(q::addParam);
-                }
-                return q.getResult();
-            }
-        });
+        return transactionAuto(key, null, getDataSource(getSqlConfig(key)), ((conn, task) ->
+            JdbcTask.queryScalar(C, task, conn, getSql(key), params)));
     }
 
-    public <T> T startTransaction(T deft, TransactionTask<T> task) {
+    public <T> List<T> queryScalars(String key, final Object... params) {
+        return transactionAuto(key, null, getDataSource(getSqlConfig(key)), ((conn, task) ->
+            JdbcTask.queryScalars(task, conn, getSql(key), params)));
+    }
+
+    public <T> List<T> queryScalars(String key, final List<Object> params) {
+        return transactionAuto(key, null, getDataSource(getSqlConfig(key)), ((conn, task) ->
+            JdbcTask.queryScalars(task, conn, getSql(key), params)));
+    }
+
+    public <T> T queryBean(String key, final Class<T> C, final Object... params) {
+        return transactionAuto(key, null, getDataSource(getSqlConfig(key)), ((conn, task) ->
+            JdbcTask.queryBean(C, task, conn, getSql(key), params)));
+    }
+
+    public <T> T queryBean(String key, final Class<T> C, final List<Object> params) {
+        return transactionAuto(key, null, getDataSource(getSqlConfig(key)), ((conn, task) ->
+            JdbcTask.queryBean(C, task, conn, getSql(key), params)));
+    }
+
+    public <T> List<T> queryBeans(String key, final Class<T> C, final Object... params) {
+        return transactionAuto(key, null, getDataSource(getSqlConfig(key)), ((conn, task) ->
+            JdbcTask.queryBeans(C, task, conn, getSql(key), params)));
+    }
+
+    public <T> List<T> queryBeans(String key, final Class<T> C, final List<Object> params) {
+        return transactionAuto(key, null, getDataSource(getSqlConfig(key)), ((conn, task) ->
+            JdbcTask.queryBeans(C, task, conn, getSql(key), params)));
+    }
+
+    public List<Map<String, Object>> queryMaps(String key, final Object... params) {
+        return transactionAuto(key, null, getDataSource(getSqlConfig(key)), ((conn, task) ->
+            JdbcTask.queryMaps(task, conn, getSql(key), params)));
+    }
+
+    public List<Map<String, Object>> queryMaps(String key, final List<Object> params) {
+        return transactionAuto(key, null, getDataSource(getSqlConfig(key)), ((conn, task) ->
+            JdbcTask.queryMaps(task, conn, getSql(key), params)));
+    }
+
+    public List<Object[]> queryArrays(String key, final Object... params) {
+        return transactionAuto(key, null, getDataSource(getSqlConfig(key)), ((conn, task) ->
+            JdbcTask.queryArrays(task, conn, getSql(key), params)));
+    }
+
+    public List<Object[]> queryArrays(String key, final List<Object> params) {
+        return transactionAuto(key, null, getDataSource(getSqlConfig(key)), ((conn, task) ->
+            JdbcTask.queryArrays(task, conn, getSql(key), params)));
+    }
+
+
+    public <T> T transaction(TaskLambda<T> run) {
+        return transaction("task?", null, null, run);
+    }
+
+    public <T> T transaction(String tag, TaskLambda<T> run) {
+        return transaction(tag, null, null, run);
+    }
+
+    public <T> T transaction(String tag, T deft, DataSource ds, TaskLambda<T> run) {
+        if (ds == null) {
+            ds = getDataSource();
+        }
+        TransactionTaskDefault<T> task = new TransactionTaskDefault<>(ds, tag, getSql(tag), run);
+        return Transaction.execute(task.getDataSource(), task, deft);
+    }
+
+    public <T> T transactionAuto(TaskLambda<T> run) {
+        return transactionAuto("task?", null, null, run);
+    }
+
+    public <T> T transactionAuto(String tag, TaskLambda<T> run) {
+        return transactionAuto(tag, null, null, run);
+    }
+
+    public <T> T transactionAuto(String tag, T deft, DataSource ds, TaskLambda<T> run) {
+        if (ds == null) {
+            ds = getDataSource();
+        }
+        TransactionTaskDefault<T> task = new TransactionTaskDefault<>(ds, tag, getSql(tag), run);
+        return Transaction.executeAuto(task.getDataSource(), task, deft);
+    }
+
+    public <T> T transaction(T deft, TransactionTask<T> task) {
         if (task.getDataSource() != null) {
             return Transaction.execute(task.getDataSource(), task, deft);
         } else {
@@ -65,7 +136,7 @@ public class JdbcRunnerImpl implements JdbcRunner {
         }
     }
 
-    public <T> T startTransactionAuto(T deft, TransactionTask<T> task) {
+    public <T> T transactionAuto(T deft, TransactionTask<T> task) {
         if (task.getDataSource() != null) {
             return Transaction.executeAuto(task.getDataSource(), task, deft);
         } else {
@@ -73,23 +144,23 @@ public class JdbcRunnerImpl implements JdbcRunner {
         }
     }
 
+
     public DataSource getDataSource() {
-        return getDataSource(config.getDefaultDataSource(), "MySQL");
+        return getDataSource(config.getDefaultDataSource(),
+            getSqlDialect(config.getDefaultDataSource()));
     }
 
-    public DataSource getDataSource(Statement s) {
-        if (s == null) {
+
+    public String getSqlDialect(String key) {
+        String dialect = mapDataSourceDialect.get(key);
+        if (dialect != null && dialect.length() > 0) {
+            return dialect;
+        }
+        DataSourceConf conf = config.getMapDataSource().get(key);
+        if (conf == null) {
             return null;
         }
-        String key = s.getDataSource();
-        if (key == null || key.length() <= 0) {
-            key = config.getDefaultDataSource();
-        }
-        if (key == null || key.length() <= 0) {
-            return null;
-        } else {
-            return getDataSource(key, s.getDialect());
-        }
+        return conf.getDialect();
     }
 
     public DataSource getDataSource(String key, String dialect) {
@@ -114,6 +185,27 @@ public class JdbcRunnerImpl implements JdbcRunner {
             return null;
         }
         return s.getSql();
+    }
+
+    private DataSource getDataSource(Statement s) {
+        if (s == null) {
+            log.error("Statement arg is null");
+            return null;
+        }
+        String key = s.getDataSource();
+        if (key == null || key.length() <= 0) {
+            key = config.getDefaultDataSource();
+        }
+        if (key == null || key.length() <= 0) {
+            log.error("key of Statement arg is null");
+            return null;
+        } else {
+            DataSource ds = getDataSource(key, s.getDialect());
+            if (ds == null) {
+                log.error("No {} datasource with key '{}'", s.getDialect(), key);
+            }
+            return ds;
+        }
     }
 
     private Statement getSqlConfig(String key) {

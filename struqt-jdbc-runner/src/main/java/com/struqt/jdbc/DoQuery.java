@@ -2,6 +2,7 @@ package com.struqt.jdbc;
 
 import org.apache.commons.dbutils.ResultSetHandler;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,23 +12,26 @@ import java.sql.SQLException;
  */
 public class DoQuery<T> extends DoSql<DoQuery<T>> {
 
-    @SuppressWarnings("unused")
-    static public <T> DoQuery<T> Get(Class<T> C) {
+    static <T> DoQuery<T> Get(Class<T> C) {
         return new DoQuery<>();
     }
 
     static public class List<T> extends DoQuery<java.util.List<T>> {
     }
 
-    protected DoQuery() {
+    private DoQuery() {
     }
 
-    ResultSetHandler<T> handler;
-    T result;
+    private ResultSetHandler<T> handler;
+    private T result;
 
     public DoQuery<T> setHandler(ResultSetHandler<T> handler) {
         this.handler = handler;
         return this;
+    }
+
+    public T fetch(Connection conn) throws SQLException {
+        return setConnection(conn).getResult();
     }
 
     public T getResult() throws SQLException {
@@ -60,12 +64,11 @@ public class DoQuery<T> extends DoSql<DoQuery<T>> {
     }
 
     @Override
-    public DoQuery<T> start() throws SQLException {
+    public void start() throws SQLException {
         if (this.handler == null) {
             throw new SQLException("Null ResultSetHandler");
         }
         super.start();
-        return this;
     }
 
 

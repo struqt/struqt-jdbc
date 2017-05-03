@@ -11,26 +11,31 @@ import java.util.Map;
 /**
  * Created by wangkang on 9/24/16
  */
-public abstract class TransactionTask<T> implements Query {
+@SuppressWarnings("ALL")
+public abstract class TransactionTask<T> implements JdbcTask {
 
-    private final DataSource dataSource;
+    public abstract T run(Connection conn) throws SQLException;
+
     private final String tag;
+    private final String sql;
+    private final DataSource dataSource;
 
     public TransactionTask() {
-        this(null, null);
-    }
-
-    public TransactionTask(String tag) {
-        this(null, tag);
+        this(null, null, null);
     }
 
     public TransactionTask(DataSource dataSource) {
-        this(dataSource, null);
+        this(dataSource, null, null);
     }
 
-    public TransactionTask(DataSource dataSource, String tag) {
+    public TransactionTask(String tag) {
+        this(null, tag, null);
+    }
+
+    public TransactionTask(DataSource dataSource, String tag, String sql) {
         this.dataSource = dataSource;
         this.tag = tag;
+        this.sql = sql;
     }
 
     public DataSource getDataSource() {
@@ -41,58 +46,101 @@ public abstract class TransactionTask<T> implements Query {
         return tag;
     }
 
-    public abstract T run(Connection conn) throws SQLException;
 
-    protected <R> DoQuery<R> queryScalar(Connection conn, Class<R> C) {
-        return DoQuery.Get(C).setTask(this).setConnection(conn)
-            .setHandler(new ScalarHandler<R>());
+    /* ********************************************************************** */
+
+
+    public DoInsert dataInsert() {
+        return DoInsert.Get().setTask(this).setSql(sql);
     }
 
-    protected <R> DoQuery<List<R>> queryScalars(Connection conn, Class<R> C) {
-        return new DoQuery.List<R>().setTask(this).setConnection(conn)
-            .setHandler(new ColumnListHandler<R>());
+    public DoUpdate dataUpdate() {
+        return DoUpdate.Get().setTask(this).setSql(sql);
     }
 
-    protected <R> DoQuery<R> queryBean(Connection conn, Class<R> C) {
-        return DoQuery.Get(C).setTask(this).setConnection(conn)
-            .setHandler(new BeanHandler<>(C));
+    public DoBatch dataBatch() {
+        return DoBatch.Get().setTask(this).setSql(sql);
     }
 
-    protected <R> DoQuery<List<R>> queryBeans(Connection conn, Class<R> C) {
-        return new DoQuery.List<R>().setTask(this).setConnection(conn)
-            .setHandler(new BeanListHandler<>(C));
+    public <R> DoQuery<R> queryScalar(Class<R> C) {
+        return DoQuery.Get(C).setTask(this)
+            .setSql(sql).setHandler(new ScalarHandler<>());
     }
 
-    protected DoQuery<List<Map<String, Object>>> queryMaps(Connection conn) {
-        return new DoQuery.List<Map<String, Object>>()
-            .setTask(this).setConnection(conn)
-            .setHandler(new MapListHandler());
+    public <R> DoQuery<List<R>> queryScalars(Class<R> C) {
+        return new DoQuery.List<R>().setTask(this)
+            .setSql(sql).setHandler(new ColumnListHandler<>());
     }
 
-    protected DoQuery<List<Object[]>> queryArrays(Connection conn) {
-        return new DoQuery.List<Object[]>()
-            .setTask(this).setConnection(conn)
-            .setHandler(new ArrayListHandler());
+    public <R> DoQuery<R> queryBean(Class<R> C) {
+        return DoQuery.Get(C).setTask(this)
+            .setSql(sql).setHandler(new BeanHandler<>(C));
     }
 
-    protected DoInsert dataInsert(Connection conn) {
-        return DoInsert.Get().setTask(this).setConnection(conn);
+    public <R> DoQuery<List<R>> queryBeans(Class<R> C) {
+        return new DoQuery.List<R>().setTask(this)
+            .setSql(sql).setHandler(new BeanListHandler<>(C));
     }
 
-    protected DoUpdate dataUpdate(Connection conn) {
-        return DoUpdate.Get().setTask(this).setConnection(conn);
+    public DoQuery<List<Map<String, Object>>> queryMaps() {
+        return new DoQuery.List<Map<String, Object>>().setTask(this)
+            .setSql(sql).setHandler(new MapListHandler());
     }
 
-    protected DoBatch dataBatch(Connection conn) {
-        return DoBatch.Get().setTask(this).setConnection(conn);
+    public DoQuery<List<Object[]>> queryArrays() {
+        return new DoQuery.List<Object[]>().setTask(this)
+            .setSql(sql).setHandler(new ArrayListHandler());
     }
+
+
+    /* ********************************************************************** */
+
+
+    public DoInsert dataInsert(Connection conn) {
+        return dataInsert().setConnection(conn);
+    }
+
+    public DoUpdate dataUpdate(Connection conn) {
+        return dataUpdate().setConnection(conn);
+    }
+
+    public DoBatch dataBatch(Connection conn) {
+        return dataBatch().setConnection(conn);
+    }
+
+    public <R> DoQuery<R> queryScalar(Connection conn, Class<R> C) {
+        return queryScalar(C).setConnection(conn);
+    }
+
+    public <R> DoQuery<List<R>> queryScalars(Connection conn, Class<R> C) {
+        return queryScalars(C).setConnection(conn);
+    }
+
+    public <R> DoQuery<R> queryBean(Connection conn, Class<R> C) {
+        return queryBean(C).setConnection(conn);
+    }
+
+    public <R> DoQuery<List<R>> queryBeans(Connection conn, Class<R> C) {
+        return queryBeans(C).setConnection(conn);
+    }
+
+    public DoQuery<List<Map<String, Object>>> queryMaps(Connection conn) {
+        return queryMaps().setConnection(conn);
+    }
+
+    public DoQuery<List<Object[]>> queryArrays(Connection conn) {
+        return queryArrays().setConnection(conn);
+    }
+
+
+    /* ********************************************************************** */
+
 
     @Override
     public String toString() {
-        return "TransactionTask{" +
-            "in='" + super.toString() + '\'' +
-            ",tag='" + tag + '\'' +
-            '}';
+        return "TransactionTask{"
+            + "in='" + super.toString() + '\''
+            + ",tag='" + tag + '\'' + '}';
     }
 
 }

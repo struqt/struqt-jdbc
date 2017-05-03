@@ -11,15 +11,15 @@ public abstract class DataSourceProvider {
 
     private DataSourceConf config;
 
-    public DataSourceConf getConfig() {
+    DataSourceConf getConfig() {
         return config;
     }
 
-    public void setConfig(DataSourceConf config) {
+    void setConfig(DataSourceConf config) {
         this.config = config;
     }
 
-    public final String getJdbcUrl() {
+    final String getJdbcUrl() {
         if (config == null) {
             return null;
         }

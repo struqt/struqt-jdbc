@@ -13,9 +13,9 @@ import java.util.Properties;
 /**
  * Created by wangkang on 9/18/16
  */
-public class HikariProvider extends DataSourceProvider {
+public class DataSourceHikari extends DataSourceProvider {
 
-    private final Logger log = LoggerFactory.getLogger(HikariProvider.class);
+    private final Logger log = LoggerFactory.getLogger(DataSourceHikari.class);
 
     @Override
     public DataSource getDataSource() {

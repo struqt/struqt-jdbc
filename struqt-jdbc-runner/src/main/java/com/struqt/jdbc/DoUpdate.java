@@ -25,15 +25,16 @@ public class DoUpdate extends DoSql<DoUpdate> {
         return this;
     }
 
+    public DoUpdate setExpectCode(Integer expectCode) {
+        this.expectCode = expectCode;
+        return this;
+    }
+
     public Integer getReturnCode() throws SQLException {
         if (!isStarted()) {
             start();
         }
         return returnCode;
-    }
-
-    public void setExpectCode(Integer expectCode) {
-        this.expectCode = expectCode;
     }
 
     @Override

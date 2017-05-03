@@ -21,13 +21,13 @@ public abstract class DoSql<T extends DoSql<T>> {
     private String sql;
     private List<Object> params;
     private boolean started;
-    private TransactionTask task;
+    private JdbcTask task;
 
-    public DoSql() {
+    DoSql() {
         params = new ArrayList<>();
     }
 
-    public T start() throws SQLException {
+    public void start() throws SQLException {
         if (conn == null) {
             throw new SQLException("Null connection");
         }
@@ -44,7 +44,6 @@ public abstract class DoSql<T extends DoSql<T>> {
             log.info(sql);
             throw new SQLException(e);
         }
-        return (T) this;
     }
 
     public T reset() {
@@ -95,12 +94,12 @@ public abstract class DoSql<T extends DoSql<T>> {
         return params;
     }
 
-    public T setTask(TransactionTask task) {
+    public T setTask(JdbcTask task) {
         this.task = task;
         return (T) this;
     }
 
-    public TransactionTask getTask() {
+    public JdbcTask getTask() {
         return task;
     }
 

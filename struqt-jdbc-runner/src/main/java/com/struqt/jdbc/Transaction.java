@@ -10,11 +10,11 @@ import java.sql.SQLException;
 /**
  * Created by wangkang on 9/24/16
  */
-public class Transaction {
+abstract class Transaction {
 
     static private final Logger log = LoggerFactory.getLogger(Transaction.class);
 
-    static public <T> T execute(DataSource dataSrc, TransactionTask<T> task, T deftResult) {
+    static <T> T execute(DataSource dataSrc, TransactionTask<T> task, T deftResult) {
         if (dataSrc == null) {
             log.error("Transaction won't start, no data source, task: {}", task.toString());
             return deftResult;
@@ -24,6 +24,7 @@ public class Transaction {
         int auto = -1;
         try {
             conn = dataSrc.getConnection();
+            assert conn != null;
             auto = conn.getAutoCommit() ? 0 : 1;
             conn.setAutoCommit(false);
             conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
@@ -39,7 +40,7 @@ public class Transaction {
             rollback(conn);
         } finally {
             try {
-                if (auto >= 0 && conn != null) {
+                if (auto >= 0) {
                     conn.setAutoCommit(auto == 0);
                 }
             } catch (SQLException e) {
@@ -51,7 +52,7 @@ public class Transaction {
         return result == null ? deftResult : result;
     }
 
-    static public <T> T executeAuto(DataSource dataSrc, TransactionTask<T> task, T deftResult) {
+    static <T> T executeAuto(DataSource dataSrc, TransactionTask<T> task, T deftResult) {
         if (dataSrc == null) {
             log.error("Transaction won't start, no data source, task: {}", task.toString());
             return deftResult;
@@ -61,6 +62,7 @@ public class Transaction {
         int auto = -1;
         try {
             conn = dataSrc.getConnection();
+            assert conn != null;
             auto = conn.getAutoCommit() ? 0 : 1;
             conn.setAutoCommit(true);
             conn.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
@@ -74,7 +76,7 @@ public class Transaction {
             log.error("Transaction won't rollback, task failed: {}", task.toString(), e);
         } finally {
             try {
-                if (auto >= 0 && conn != null) {
+                if (auto >= 0) {
                     conn.setAutoCommit(auto == 0);
                 }
             } catch (SQLException ignored) {
@@ -86,7 +88,7 @@ public class Transaction {
     }
 
 
-    static public void rollback(Connection conn) {
+    private static void rollback(Connection conn) {
         if (conn == null) {
             return;
         }
@@ -99,13 +101,13 @@ public class Transaction {
         }
     }
 
-    static public void close(Connection o) throws SQLException {
+    private static void close(Connection o) throws SQLException {
         if (o != null && !o.isClosed()) {
             o.close();
         }
     }
 
-    static public void closeQuietly(Connection conn) {
+    private static void closeQuietly(Connection conn) {
         try {
             close(conn);
         } catch (SQLException e) {
