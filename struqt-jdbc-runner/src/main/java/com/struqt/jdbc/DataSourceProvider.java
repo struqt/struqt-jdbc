@@ -24,16 +24,16 @@ public abstract class DataSourceProvider {
             return null;
         }
         if (config.getJdbcUrl() == null || config.getJdbcUrl().length() <= 0) {
-            return config.getJdbcUrl();
+            return config.getJdbcUrl().trim();
         }
         if (config.getDatabase() == null || config.getDatabase().length() <= 0) {
-            return config.getJdbcUrl();
+            return config.getJdbcUrl().trim();
         } else {
             if (config.getJdbcUrl().endsWith("/")) {
-                return config.getJdbcUrl() + config.getDatabase();
+                return config.getJdbcUrl().trim() + config.getDatabase().trim();
 
             } else {
-                return config.getJdbcUrl() + "/" + config.getDatabase();
+                return config.getJdbcUrl().trim() + "/" + config.getDatabase().trim();
             }
         }
     }

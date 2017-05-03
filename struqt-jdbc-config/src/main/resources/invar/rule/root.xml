@@ -5,13 +5,16 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://struqt.com/invar/1.0 http://struqt.com/xsd/invar-rule-1.0.xsd">
 
-  <struct name="Root" doc="Root config for JDBC" alias="root" nohotfix="true">
-    <field useptr="true" name="mapStatement  " type="Map-String-Statement" doc="SQL Statement configs"/>
-    <field useptr="true" name="mapDataSource " type="Map-String-DataSourceConf" doc="JDBC data source configs"/>
+  <struct name="JdbcRunnerConf" doc="Root config for JDBC" alias="root" nohotfix="true">
+    <field useptr="true" name="moduleName" type="String" doc="Module name"/>
+    <field useptr="true" name="defaultDataSource" type="String" value="default" doc="Default data source key"/>
+    <field useptr="true" name="mapStatement " type="Map-String-Statement" doc="SQL Statement configs"/>
+    <field useptr="true" name="mapDataSource" type="Map-String-DataSourceConf" doc="JDBC data source configs"/>
   </struct>
 
   <struct name="Statement" doc="SQL Statement config" nohotfix="true">
     <field name="key       " type="String" doc="Key of this object" value="hikari"/>
+    <field name="dialect   " type="String" doc="SQL dialect" value="MySQL"/>
     <field name="desc      " type="String" doc="Description"/>
     <field name="sql       " type="String" doc="SQL statement"/>
     <field name="dataSource" type="String" doc="Default data source name" useptr="true"/>
@@ -20,6 +23,7 @@
 
   <struct name="DataSourceConf" doc="JDBC data source config" nohotfix="true">
     <field name="key       " type="String" doc="Key of this object" value="default"/>
+    <field name="dialect   " type="String" doc="SQL dialect" value="MySQL"/>
     <field name="jdbcUrl   " type="String" doc="Database url" value="jdbc:mysql://127.0.0.1:3306/"/>
     <field name="database  " type="String" doc="Database schema" value="example?characterEncoding=UTF-8"/>
     <field name="username  " type="String" doc="Database username" value="root"/>

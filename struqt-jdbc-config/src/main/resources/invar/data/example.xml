@@ -2,6 +2,9 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="invar.data data.xsd" xmlns:tns="invar.data">
 
+  <moduleName value="test"/>
+  <defaultDataSource value="default"/>
+
   <mapStatement>
     <Statement key="select-now-datetime" desc="Query current time of database">
       <sql><![CDATA[
@@ -11,17 +14,17 @@
   </mapStatement>
 
   <mapDataSource>
-    <DataSourceConf key="default">
+    <DataSourceConf key="default" dialect="MySQL">
       <!-- https://github.com/brettwooldridge/HikariCP/wiki/Configuration -->
       <provider value="com.struqt.jdbc.HikariProvider"/>
-      <jdbcUrl value="jdbc:mysql://127.0.0.1:3306/"/>
+      <jdbcUrl value="jdbc:mysql://127.0.0.1:33061/"/>
       <database><![CDATA[
         struqt_example?rewriteBatchedStatements=true&useUnicode=true&characterEncoding=UTF-8 ]]></database>
       <username value="root"/>
       <password value="123!@#4567"/>
       <properties>
-        <string key="maximumPoolSize" value="10"/>
-        <string key="minimumIdle" value="10"/>
+        <string key="maximumPoolSize" value="150"/>
+        <string key="minimumIdle" value="3"/>
         <string key="connectionTimeout" value="15000"/>
         <string key="idleTimeout" value="600000"/>
         <string key="maxLifetime" value="900000"/>

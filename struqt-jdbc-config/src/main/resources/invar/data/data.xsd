@@ -2,7 +2,7 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema"
 xmlns:tns="invar.data" targetNamespace="invar.data">
 
-<xs:element name="root" type="tns:com.struqt.jdbc.config.Root" />
+<xs:element name="root" type="tns:com.struqt.jdbc.config.JdbcRunnerConf" />
 
 <xs:complexType name="int8"><xs:simpleContent><xs:extension base="xs:string">
   <xs:attribute type="xs:byte" name="value" use="optional"/></xs:extension></xs:simpleContent></xs:complexType>
@@ -29,8 +29,10 @@ xmlns:tns="invar.data" targetNamespace="invar.data">
 <xs:complexType name="string"><xs:simpleContent><xs:extension base="xs:string">
   <xs:attribute type="xs:string" name="value" use="optional"/></xs:extension></xs:simpleContent></xs:complexType>
 
-<xs:complexType name="com.struqt.jdbc.config.Root">
+<xs:complexType name="com.struqt.jdbc.config.JdbcRunnerConf">
   <xs:sequence>
+    <xs:element name="moduleName" minOccurs="0" maxOccurs="2048" type="tns:string" />
+    <xs:element name="defaultDataSource" minOccurs="0" maxOccurs="2048" type="tns:string" />
     <xs:element name="mapStatement" minOccurs="0" maxOccurs="2048" >
       <xs:complexType>
       <xs:sequence>
@@ -44,10 +46,13 @@ xmlns:tns="invar.data" targetNamespace="invar.data">
       </xs:sequence></xs:complexType>
     </xs:element>
   </xs:sequence>
+  <xs:attribute name="moduleName" type="xs:string" />
+  <xs:attribute name="defaultDataSource" type="xs:string" />
 </xs:complexType>
 <xs:complexType name="com.struqt.jdbc.config.Statement">
   <xs:sequence>
     <xs:element name="key" minOccurs="0" maxOccurs="2048" type="tns:string" />
+    <xs:element name="dialect" minOccurs="0" maxOccurs="2048" type="tns:string" />
     <xs:element name="desc" minOccurs="0" maxOccurs="2048" type="tns:string" />
     <xs:element name="sql" minOccurs="0" maxOccurs="2048" type="tns:string" />
     <xs:element name="dataSource" minOccurs="0" maxOccurs="2048" type="tns:string" />
@@ -64,6 +69,7 @@ xmlns:tns="invar.data" targetNamespace="invar.data">
     </xs:element>
   </xs:sequence>
   <xs:attribute name="key" type="xs:string" />
+  <xs:attribute name="dialect" type="xs:string" />
   <xs:attribute name="desc" type="xs:string" />
   <xs:attribute name="sql" type="xs:string" />
   <xs:attribute name="dataSource" type="xs:string" />
@@ -71,6 +77,7 @@ xmlns:tns="invar.data" targetNamespace="invar.data">
 <xs:complexType name="com.struqt.jdbc.config.DataSourceConf">
   <xs:sequence>
     <xs:element name="key" minOccurs="0" maxOccurs="2048" type="tns:string" />
+    <xs:element name="dialect" minOccurs="0" maxOccurs="2048" type="tns:string" />
     <xs:element name="jdbcUrl" minOccurs="0" maxOccurs="2048" type="tns:string" />
     <xs:element name="database" minOccurs="0" maxOccurs="2048" type="tns:string" />
     <xs:element name="username" minOccurs="0" maxOccurs="2048" type="tns:string" />
@@ -100,6 +107,7 @@ xmlns:tns="invar.data" targetNamespace="invar.data">
     </xs:element>
   </xs:sequence>
   <xs:attribute name="key" type="xs:string" />
+  <xs:attribute name="dialect" type="xs:string" />
   <xs:attribute name="jdbcUrl" type="xs:string" />
   <xs:attribute name="database" type="xs:string" />
   <xs:attribute name="username" type="xs:string" />

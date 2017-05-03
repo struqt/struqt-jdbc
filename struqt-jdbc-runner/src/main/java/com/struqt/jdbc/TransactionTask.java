@@ -94,4 +94,24 @@ public abstract class TransactionTask<T> {
             ",tag='" + tag + '\'' +
             '}';
     }
+
+
+    public static <T> T queryScalar
+        (TransactionTask task, Connection conn, final String sql, final Class<T> C)
+        throws SQLException {
+        return queryScalar(task, conn, sql, C, null);
+    }
+
+    public static <T> T queryScalar
+        (TransactionTask task, Connection conn, final String sql, final Class<T> C, final List<Object> params)
+        throws SQLException {
+        DoQuery<T> q = DoQuery.Get(C).setConnection(conn)
+            .setTask(task).setSql(sql).setHandler(new ScalarHandler<>());
+        if (params != null) {
+            for (Object param : params) {
+                q.addParam(param);
+            }
+        }
+        return q.getResult();
+    }
 }
