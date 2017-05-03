@@ -11,14 +11,10 @@ import java.util.Map;
 /**
  * Created by wangkang on 9/24/16
  */
-public abstract class TransactionTask<T> {
+public abstract class TransactionTask<T> implements Query {
 
     private final DataSource dataSource;
     private final String tag;
-
-    public DataSource getDataSource() {
-        return dataSource;
-    }
 
     public TransactionTask() {
         this(null, null);
@@ -35,6 +31,10 @@ public abstract class TransactionTask<T> {
     public TransactionTask(DataSource dataSource, String tag) {
         this.dataSource = dataSource;
         this.tag = tag;
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
     }
 
     public String getTag() {
@@ -95,23 +95,4 @@ public abstract class TransactionTask<T> {
             '}';
     }
 
-
-    public static <T> T queryScalar
-        (TransactionTask task, Connection conn, final String sql, final Class<T> C)
-        throws SQLException {
-        return queryScalar(task, conn, sql, C, null);
-    }
-
-    public static <T> T queryScalar
-        (TransactionTask task, Connection conn, final String sql, final Class<T> C, final List<Object> params)
-        throws SQLException {
-        DoQuery<T> q = DoQuery.Get(C).setConnection(conn)
-            .setTask(task).setSql(sql).setHandler(new ScalarHandler<>());
-        if (params != null) {
-            for (Object param : params) {
-                q.addParam(param);
-            }
-        }
-        return q.getResult();
-    }
 }

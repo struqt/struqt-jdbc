@@ -1,9 +1,6 @@
 package struqt.example;
 
-import com.struqt.jdbc.JdbcRunner;
-import com.struqt.jdbc.QueryCollection;
-import com.struqt.jdbc.SqlMaker;
-import com.struqt.jdbc.TransactionTask;
+import com.struqt.jdbc.*;
 import com.struqt.jdbc.config.JdbcRunnerConf;
 import invar.lib.data.DataMapper;
 import org.jooq.Field;
@@ -43,25 +40,20 @@ public class ExampleMain {
     }
 
     private static void initJdbcRunner() throws Exception {
-        jdbc = new JdbcRunner(jdbcConfig());
+        jdbc = new JdbcRunnerImpl(jdbcConfig());
     }
 
     private static void test() {
-
         Timestamp t = jdbc.startTransaction(null, new TransactionTask<Timestamp>("test/select-now-datetime") {
             @Override
             public Timestamp run(Connection conn) throws SQLException {
                 String sql = jdbc.getSql(getTag());
-                return queryScalar(this, conn, sql, Timestamp.class);
+                return Query.scalar(this, conn, sql, Timestamp.class);
             }
         });
-
-
         System.err.println(t);
-
-        System.err.println(jdbc.queryScalar("test/select-now-datetime",Timestamp.class));
-
-}
+        System.err.println(jdbc.queryScalar("test/select-now-datetime", Timestamp.class));
+    }
 
     static public Map<String, String> init(SQLDialect dialect) {
         return sqlMaker
